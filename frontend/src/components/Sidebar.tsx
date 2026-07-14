@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useStore } from "@/store/useStore";
+import { toast } from "sonner";
 import {
   LayoutDashboard,
   Megaphone,
@@ -95,7 +96,7 @@ export default function Sidebar() {
         </div>
         <h4>Need help?</h4>
         <p>Please check our docs.</p>
-        <button onClick={() => alert("Docs")}>DOCUMENTATION</button>
+        <button onClick={() => toast.success("Opening documentation")}>DOCUMENTATION</button>
       </div>
     </aside>
   );
