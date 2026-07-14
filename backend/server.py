@@ -1,12 +1,15 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from pathlib import Path
 from typing import List
 from dotenv import load_dotenv
+import bcrypt
+import jwt
+from datetime import datetime, timedelta
 
-from models import Campaign, UserProfile
+from models import Campaign, UserProfile, UserAuth, UserLogin, UserSignup
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -14,6 +17,9 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ.get('DB_NAME', 'vision')]
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "vision-extremely-secret-key-12345")
+ALGORITHM = "HS256"
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -23,9 +29,50 @@ def format_doc(doc: dict) -> dict:
     doc["id"] = str(doc.pop("_id"))
     return doc
 
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+def create_access_token(data: dict, expires_delta: timedelta = timedelta(days=14)):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + expires_delta
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@api_router.post("/auth/signup")
+async def signup(user: UserSignup):
+    existing = await db.users_auth.find_one({"email": user.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    hashed = hash_password(user.password)
+    new_user = UserAuth(email=user.email, hashed_password=hashed, name=user.name)
+    await db.users_auth.insert_one(new_user.model_dump())
+    
+    # Also initialize user profile
+    profile = UserProfile(name=user.name, email=user.email)
+    await db.users.insert_one(profile.model_dump())
+    
+    token = create_access_token({"sub": user.email, "name": user.name})
+    return {"token": token, "user": {"email": user.email, "name": user.name}}
+
+@api_router.post("/auth/login")
+async def login(user: UserLogin):
+    existing = await db.users_auth.find_one({"email": user.email})
+    if not existing:
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+    
+    if not verify_password(user.password, existing["hashed_password"]):
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+    
+    token = create_access_token({"sub": user.email, "name": existing["name"]})
+    return {"token": token, "user": {"email": user.email, "name": existing["name"]}}
 
 @api_router.get("/user", response_model=UserProfile)
 async def get_user():
