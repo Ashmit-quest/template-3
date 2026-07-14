@@ -2,6 +2,7 @@ import { useStore } from "@/store/useStore";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { DollarSign, Globe, Send } from "lucide-react";
+import CountUp from "@/components/CountUp";
 
 export default function Profile() {
   const user = useStore(s => s.user);
@@ -64,15 +65,15 @@ export default function Profile() {
         </div>
         <div className="ph-stats">
           <div className="ps">
-            <div className="n">24</div>
+            <div className="n"><CountUp value="24" /></div>
             <div className="l">Campaigns</div>
           </div>
           <div className="ps">
-            <div className="n">$284K</div>
+            <div className="n">$<CountUp value="284" />K</div>
             <div className="l">Revenue</div>
           </div>
           <div className="ps">
-            <div className="n">9.3</div>
+            <div className="n"><CountUp value="9.3" /></div>
             <div className="l">Score</div>
           </div>
         </div>
