@@ -33,8 +33,8 @@ export default function Analytics() {
 
   const currentChartData = generateData(period);
 
-  const stat = (l: string, v: string, pct: string, up: boolean, Ic: any) => (
-    <div className="card hover stat reveal in">
+  const stat = (l: string, v: string, pct: string, up: boolean, Ic: any, key: string) => (
+    <div key={key} className="card hover stat reveal in animate-fade-in" style={{ animationDelay: '0.1s' }}>
       <div>
         <div className="s-label">{l}</div>
         <div className="s-value text-left">
@@ -49,17 +49,17 @@ export default function Analytics() {
   );
 
   return (
-    <div className="animate-fade-in">
+    <div key={period} className="animate-fade-in">
       <div className="page-title">
         <h1>Analytics</h1>
         <p>Traffic, conversion and channel performance across the funnel.</p>
       </div>
 
       <div className="grid g4">
-        {stat('Sessions', '128,400', '+12%', true, Globe)}
-        {stat('Conversion rate', '3.8%', '+0.4%', true, ArrowUp)}
-        {stat('Avg. order value', '$142', '+6%', true, DollarSign)}
-        {stat('Bounce rate', '38.2%', '-3%', false, FileText)}
+        {stat('Sessions', '128,400', '+12%', true, Globe, 'stat-1')}
+        {stat('Conversion rate', '3.8%', '+0.4%', true, ArrowUp, 'stat-2')}
+        {stat('Avg. order value', '$142', '+6%', true, DollarSign, 'stat-3')}
+        {stat('Bounce rate', '38.2%', '-3%', false, FileText, 'stat-4')}
       </div>
 
       <div className="row3">

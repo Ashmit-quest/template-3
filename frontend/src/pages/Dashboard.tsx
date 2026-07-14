@@ -52,10 +52,10 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="animate-fade-in">
+    <div key={salesPeriod} className="animate-fade-in">
       <div className="grid g4">
         {cards.map((c, i) => (
-          <div key={i} className="card hover stat reveal in">
+          <div key={i} className="card hover stat reveal in animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
             <div>
               <div className="s-label">{c.l}</div>
               <div className="s-value">
