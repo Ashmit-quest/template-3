@@ -2,6 +2,7 @@ import { Globe, ArrowUp, DollarSign, FileText, Download } from "lucide-react";
 import { useState } from "react";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
+import CountUp from "@/components/CountUp";
 
 const pieData = [
   { name: 'Organic Search', value: 42, color: '#0075FF' },
@@ -34,11 +35,11 @@ export default function Analytics() {
   const currentChartData = generateData(period);
 
   const stat = (l: string, v: string, pct: string, up: boolean, Ic: any, key: string) => (
-    <div key={key} className="card hover stat reveal in animate-fade-in" style={{ animationDelay: '0.1s' }}>
+    <div key={key} className="card hover stat reveal in animate-fade-in text-left" style={{ animationDelay: '0.1s' }}>
       <div>
         <div className="s-label">{l}</div>
         <div className="s-value text-left">
-          <span>{v}</span>
+          <span><CountUp value={v} /></span>
           <span className={`pct ${up ? 'up' : 'down'}`}>{pct}</span>
         </div>
       </div>
@@ -50,7 +51,7 @@ export default function Analytics() {
 
   return (
     <div key={period} className="animate-fade-in">
-      <div className="page-title">
+      <div className="page-title text-left">
         <h1>Analytics</h1>
         <p>Traffic, conversion and channel performance across the funnel.</p>
       </div>
@@ -62,7 +63,7 @@ export default function Analytics() {
         {stat('Bounce rate', '38.2%', '-3%', false, FileText, 'stat-4')}
       </div>
 
-      <div className="row3">
+      <div className="row3 text-left">
         <div className="card panel reveal in">
           <div className="panel-h">
             <div className="text-left">
@@ -110,7 +111,7 @@ export default function Analytics() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-              <div className="text-2xl font-extrabold text-white">42%</div>
+              <div className="text-2xl font-extrabold text-white"><CountUp value="42%" /></div>
               <div className="text-[10px] text-[var(--txt-faint)] font-bold">ORGANIC</div>
             </div>
           </div>
@@ -119,7 +120,7 @@ export default function Analytics() {
               <div key={d.name} className="flex items-center gap-2 text-[13px]">
                 <span className="w-2 h-2 rounded-full" style={{background: d.color}}></span>
                 <span className="text-[var(--txt-dim)]">{d.name}</span>
-                <span className="ml-auto font-bold text-white">{d.value}%</span>
+                <span className="ml-auto font-bold text-white"><CountUp value={`${d.value}%`} /></span>
               </div>
             ))}
           </div>
@@ -144,12 +145,12 @@ export default function Analytics() {
               <div key={x[0]} className="flex items-center gap-3">
                 <div className="w-[110px] shrink-0">
                   <div className="text-[13px] font-bold text-white">{x[0]}</div>
-                  <div className="text-[11px] text-[var(--txt-faint)]">{x[1].toLocaleString()}</div>
+                  <div className="text-[11px] text-[var(--txt-faint)]"><CountUp value={x[1]} /></div>
                 </div>
                 <div className="flex-1 h-[36px] bg-[rgba(6,11,40,0.5)] rounded-[10px] overflow-hidden">
                   <div className="h-full rounded-[10px]" style={{width: `${x[2]}%`, background: `linear-gradient(90deg, ${x[3]}, ${x[3]}aa)`}}></div>
                 </div>
-                <div className="w-[44px] text-right font-bold text-[12px] text-[var(--green)]">{x[2]}%</div>
+                <div className="w-[44px] text-right font-bold text-[12px] text-[var(--green)]"><CountUp value={`${x[2]}%`} /></div>
               </div>
             ))}
           </div>
@@ -175,9 +176,9 @@ export default function Analytics() {
             </ResponsiveContainer>
           </div>
           <div className="legend flex flex-row gap-5 mt-[6px] justify-center">
-            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#0075FF]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Mobile 68%</span></div>
-            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#21D4FD]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Desktop 24%</span></div>
-            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#01B574]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Tablet 8%</span></div>
+            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#0075FF]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Mobile <CountUp value="68%" /></span></div>
+            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#21D4FD]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Desktop <CountUp value="24%" /></span></div>
+            <div className="li flex items-center gap-2"><span className="dot w-[9px] h-[9px] rounded-full bg-[#01B574]"></span><span className="nm text-[13px] text-[var(--txt-dim)]">Tablet <CountUp value="8%" /></span></div>
           </div>
         </div>
       </div>
@@ -213,9 +214,9 @@ export default function Analytics() {
               ].map((r: any) => (
                 <tr key={r[0]}>
                   <td style={{color: 'var(--cyan)'}} className="font-semibold">{r[0]}</td>
-                  <td>{r[1].toLocaleString()}</td>
+                  <td><CountUp value={r[1]} /></td>
                   <td>{r[2]}</td>
-                  <td>${r[3].toLocaleString()}</td>
+                  <td>$<CountUp value={r[3]} /></td>
                   <td>
                     <div className="comp-track" style={{width: 90}}>
                       <div className="comp-fill h-full rounded-full" style={{width: `${r[4]}%`, background: 'var(--brand-grad)'}}></div>

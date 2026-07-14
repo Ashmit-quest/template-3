@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useStore } from "@/store/useStore";
-import { DollarSign, Globe, FileText, Send, MoreHorizontal, Plus } from "lucide-react";
+import { DollarSign, Globe, FileText, Send, MoreHorizontal } from "lucide-react";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
+import CountUp from "@/components/CountUp";
 
 const salesDataFull = {
   year: [
@@ -55,11 +56,11 @@ export default function Dashboard() {
     <div key={salesPeriod} className="animate-fade-in">
       <div className="grid g4">
         {cards.map((c, i) => (
-          <div key={i} className="card hover stat reveal in animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+          <div key={i} className="card hover stat reveal in animate-fade-in text-left" style={{ animationDelay: `${i * 0.1}s` }}>
             <div>
               <div className="s-label">{c.l}</div>
               <div className="s-value">
-                <span>{c.v}</span>
+                <span><CountUp value={c.v} /></span>
                 <span className={`pct ${c.up ? 'up' : 'down'}`}>{c.pct}</span>
               </div>
             </div>
@@ -71,7 +72,7 @@ export default function Dashboard() {
       </div>
 
       <div className="row2">
-        <div className="card welcome reveal in">
+        <div className="card welcome reveal in text-left">
           <div className="w-top">
             <small>Welcome back,</small>
             <h2>{user?.name?.split(' ')[0] || 'Mark'}</h2>
@@ -82,7 +83,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="card satis reveal in">
+        <div className="card satis reveal in text-left">
           <h3>Satisfaction Rate</h3>
           <div className="sub">From all campaigns</div>
           <div className="gauge-wrap flex-1 flex items-center justify-center py-4">
@@ -97,7 +98,7 @@ export default function Dashboard() {
           <div className="satis-foot">
             <span className="end">0%</span>
             <div className="mid">
-              <div className="big">95%</div>
+              <div className="big"><CountUp value="95%" /></div>
               <div className="lbl">Based on likes</div>
             </div>
             <span className="end">100%</span>
@@ -112,11 +113,11 @@ export default function Dashboard() {
             </div>
             <div className="ref-box">
               <div className="rl">Invited</div>
-              <div className="rv">145 people</div>
+              <div className="rv"><CountUp value="145 people" /></div>
             </div>
             <div className="ref-box">
               <div className="rl">Bonus</div>
-              <div className="rv">1,465</div>
+              <div className="rv"><CountUp value="1,465" /></div>
             </div>
           </div>
           <div className="ref-gauge relative flex items-center justify-center w-[150px] shrink-0">
@@ -124,7 +125,7 @@ export default function Dashboard() {
              <div className="absolute w-[120px] h-[120px] rounded-full border-[8px] border-t-[#01B574] border-r-[#4FD1C5] border-b-transparent border-l-transparent transform -rotate-45"></div>
             <div className="ref-score text-center absolute">
               <div className="rs">Safety</div>
-              <div className="rn">9.3</div>
+              <div className="rn"><CountUp value="9.3" /></div>
               <div className="rt">Total Score</div>
             </div>
           </div>
@@ -175,23 +176,23 @@ export default function Dashboard() {
           </div>
           <div className="au-grid">
             <div className="au-item">
-              <div className="au-top"><Globe size={15}/>Users</div>
-              <div className="au-v">32,984</div>
+              <div className="au-top flex items-center gap-1"><Globe size={15}/>Users</div>
+              <div className="au-v"><CountUp value="32,984" /></div>
               <div className="au-track"><div className="au-fill" style={{width: '80%'}}></div></div>
             </div>
             <div className="au-item">
-              <div className="au-top"><Send size={15}/>Clicks</div>
-              <div className="au-v">2.42m</div>
+              <div className="au-top flex items-center gap-1"><Send size={15}/>Clicks</div>
+              <div className="au-v"><CountUp value="2.42m" /></div>
               <div className="au-track"><div className="au-fill" style={{width: '90%'}}></div></div>
             </div>
             <div className="au-item">
-              <div className="au-top"><DollarSign size={15}/>Sales</div>
-              <div className="au-v">$2,400</div>
+              <div className="au-top flex items-center gap-1"><DollarSign size={15}/>Sales</div>
+              <div className="au-v"><CountUp value="$2,400" /></div>
               <div className="au-track"><div className="au-fill" style={{width: '30%'}}></div></div>
             </div>
             <div className="au-item">
-              <div className="au-top"><FileText size={15}/>Items</div>
-              <div className="au-v">320</div>
+              <div className="au-top flex items-center gap-1"><FileText size={15}/>Items</div>
+              <div className="au-v"><CountUp value="320" /></div>
               <div className="au-track"><div className="au-fill" style={{width: '50%'}}></div></div>
             </div>
           </div>
@@ -252,17 +253,17 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="tl text-left">
-            <div className="tl-item">
-               <span className="tl-dot bg-[#01B574]"><DollarSign size={11} color="#fff"/></span>
-               <div className="tl-body"><div className="tt">$2,400 — Ad spend added</div><div className="td">22 DEC 7:20 PM</div></div>
+            <div className="tl-item flex gap-3">
+               <span className="tl-dot bg-[#01B574] w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"><DollarSign size={11} color="#fff"/></span>
+               <div className="tl-body"><div className="tt text-sm font-semibold text-white">$2,400 — Ad spend added</div><div className="td text-xs text-[var(--txt-dim)]">22 DEC 7:20 PM</div></div>
             </div>
-            <div className="tl-item">
-               <span className="tl-dot bg-[#E53E3E]"><Globe size={11} color="#fff"/></span>
-               <div className="tl-body"><div className="tt">New lead #4219423</div><div className="td">21 DEC 11:00 PM</div></div>
+            <div className="tl-item flex gap-3">
+               <span className="tl-dot bg-[#E53E3E] w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"><Globe size={11} color="#fff"/></span>
+               <div className="tl-body"><div className="tt text-sm font-semibold text-white">New lead #4219423</div><div className="td text-xs text-[var(--txt-dim)]">21 DEC 11:00 PM</div></div>
             </div>
-            <div className="tl-item">
-               <span className="tl-dot bg-[#0075FF]"><Send size={11} color="#fff"/></span>
-               <div className="tl-body"><div className="tt">Campaign "Summer" published</div><div className="td">21 DEC 9:34 PM</div></div>
+            <div className="tl-item flex gap-3">
+               <span className="tl-dot bg-[#0075FF] w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"><Send size={11} color="#fff"/></span>
+               <div className="tl-body"><div className="tt text-sm font-semibold text-white">Campaign "Summer" published</div><div className="td text-xs text-[var(--txt-dim)]">21 DEC 9:34 PM</div></div>
             </div>
           </div>
         </div>
