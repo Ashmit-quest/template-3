@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field
 from typing import Optional, List
 import uuid
 
@@ -22,18 +22,3 @@ class UserProfile(BaseModel):
     company: str = "Vision Inc."
     location: str = "San Francisco, CA"
     bio: str = "Growth-obsessed marketer running paid, lifecycle and brand across the funnel."
-
-class UserAuth(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    email: EmailStr
-    hashed_password: str
-    name: str
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
-
-class UserSignup(BaseModel):
-    email: EmailStr
-    password: str
-    name: str

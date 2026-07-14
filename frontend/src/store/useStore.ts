@@ -13,19 +13,14 @@ interface UserProfile {
 interface StoreState {
   user: UserProfile | null;
   campaigns: any[];
-  token: string | null;
   fetchUser: () => Promise<void>;
   fetchCampaigns: () => Promise<void>;
   updateUser: (data: Partial<UserProfile>) => Promise<void>;
-  login: (email: string, password: string) => Promise<boolean>;
-  signup: (name: string, email: string, password: string) => Promise<boolean>;
-  logout: () => void;
 }
 
-export const useStore = create<StoreState>((set, get) => ({
+export const useStore = create<StoreState>((set) => ({
   user: null,
   campaigns: [],
-  token: localStorage.getItem("token"),
   fetchUser: async () => {
     try {
       const res = await fetch(`${API_URL}/api/user`);
@@ -57,44 +52,4 @@ export const useStore = create<StoreState>((set, get) => ({
       console.error(e);
     }
   },
-  login: async (email, password) => {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) return false;
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      set({ token: data.token });
-      await get().fetchUser();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  },
-  signup: async (name, email, password) => {
-    try {
-      const res = await fetch(`${API_URL}/api/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      if (!res.ok) return false;
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      set({ token: data.token });
-      await get().fetchUser();
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
-  },
-  logout: () => {
-    localStorage.removeItem("token");
-    set({ token: null, user: null });
-  }
 }));
