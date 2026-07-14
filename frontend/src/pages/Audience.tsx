@@ -1,4 +1,5 @@
 import { Users, ArrowUp, UserPlus, UserMinus } from "lucide-react";
+import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const audData = [
@@ -15,11 +16,18 @@ const genderData = [
 ];
 
 export default function Audience() {
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 150);
+    return () => clearTimeout(t);
+  }, []);
+
   const stat = (l: string, v: string, pct: string, up: boolean, Ic: any) => (
     <div className="card hover stat reveal in">
       <div>
         <div className="s-label">{l}</div>
-        <div className="s-value">
+        <div className="s-value text-left">
           <span>{v}</span>
           <span className={`pct ${up ? 'up' : 'down'}`}>{pct}</span>
         </div>
@@ -31,13 +39,19 @@ export default function Audience() {
   );
 
   const hbar = (name: string, val: string, pct: number, c: string) => (
-    <div className="mb-4">
+    <div className="mb-4 text-left">
       <div className="flex justify-between mb-2 text-[13px]">
-        <span className="font-semibold">{name}</span>
+        <span className="font-semibold text-white">{name}</span>
         <span className="text-[var(--txt-dim)]">{val}</span>
       </div>
       <div className="comp-track h-[9px]">
-        <div className="comp-fill" style={{width: `${pct}%`, background: `linear-gradient(90deg, ${c}, ${c}aa)`}}></div>
+        <div 
+          className="comp-fill h-full rounded-full transition-all duration-1000 ease-out" 
+          style={{
+            width: animated ? `${pct}%` : '0%', 
+            background: `linear-gradient(90deg, ${c}, ${c}aa)`
+          }}
+        ></div>
       </div>
     </div>
   );
@@ -56,7 +70,7 @@ export default function Audience() {
         {stat('Unsubscribes', '312', '-8%', false, UserMinus)}
       </div>
 
-      <div className="row3">
+      <div className="row3 text-left">
         <div className="card panel reveal in">
           <div className="panel-h">
             <div>
@@ -74,7 +88,7 @@ export default function Audience() {
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="name" tick={{fontSize: 10, fill: 'var(--txt-faint)'}} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{background: '#0B1437', borderColor: 'rgba(255,255,255,0.16)', borderRadius: 10}} />
+                <Tooltip contentStyle={{background: '#0B1437', borderColor: 'rgba(255,255,255,0.16)', borderRadius: 10}} formatter={(value: any) => [`${(value * 1000).toLocaleString()} people`, "Audience"]} />
                 <Area type="monotone" dataKey="v" stroke="#0075FF" strokeWidth={3} fillOpacity={1} fill="url(#colorAud)" />
               </AreaChart>
             </ResponsiveContainer>
@@ -99,8 +113,8 @@ export default function Audience() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-              <div className="text-2xl font-extrabold">54%</div>
-              <div className="text-[10px] text-[var(--txt-faint)]">FEMALE</div>
+              <div className="text-2xl font-extrabold text-white">54%</div>
+              <div className="text-[10px] text-[var(--txt-faint)] font-bold">FEMALE</div>
             </div>
           </div>
           <div className="legend mt-4 flex flex-col gap-2">
@@ -108,7 +122,7 @@ export default function Audience() {
               <div key={d.name} className="flex items-center gap-2 text-[13px]">
                 <span className="w-2 h-2 rounded-full" style={{background: d.color}}></span>
                 <span className="text-[var(--txt-dim)]">{d.name}</span>
-                <span className="ml-auto font-bold">{d.value}%</span>
+                <span className="ml-auto font-bold text-white">{d.value}%</span>
               </div>
             ))}
           </div>
@@ -117,7 +131,7 @@ export default function Audience() {
 
       <div className="row3">
         <div className="card panel reveal in">
-          <div className="panel-h">
+          <div className="panel-h text-left">
             <div>
               <h3>Age distribution</h3>
               <div className="sub">By share of audience</div>
@@ -132,7 +146,7 @@ export default function Audience() {
           </div>
         </div>
         <div className="card panel reveal in">
-          <div className="panel-h">
+          <div className="panel-h text-left">
             <div>
               <h3>Top locations</h3>
               <div className="sub">By audience size</div>
