@@ -1,6 +1,7 @@
 import { Users, ArrowUp, UserPlus, UserMinus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import CountUp from "@/components/CountUp";
 
 const audData = [
   { name: 'Jan', v: 42 }, { name: 'Feb', v: 45 }, { name: 'Mar', v: 48 },
@@ -24,11 +25,11 @@ export default function Audience() {
   }, []);
 
   const stat = (l: string, v: string, pct: string, up: boolean, Ic: any) => (
-    <div className="card hover stat reveal in">
+    <div className="card hover stat reveal in text-left">
       <div>
         <div className="s-label">{l}</div>
         <div className="s-value text-left">
-          <span>{v}</span>
+          <span><CountUp value={v} /></span>
           <span className={`pct ${up ? 'up' : 'down'}`}>{pct}</span>
         </div>
       </div>
@@ -42,7 +43,7 @@ export default function Audience() {
     <div className="mb-4 text-left">
       <div className="flex justify-between mb-2 text-[13px]">
         <span className="font-semibold text-white">{name}</span>
-        <span className="text-[var(--txt-dim)]">{val}</span>
+        <span className="text-[var(--txt-dim)]"><CountUp value={val} /></span>
       </div>
       <div className="comp-track h-[9px]">
         <div 
@@ -58,7 +59,7 @@ export default function Audience() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-title">
+      <div className="page-title text-left">
         <h1>Audience</h1>
         <p>Who your customers are and how your community is growing.</p>
       </div>
@@ -96,7 +97,7 @@ export default function Audience() {
         </div>
 
         <div className="card panel reveal in">
-          <div className="panel-h">
+          <div className="panel-h text-left">
             <div>
               <h3>Gender</h3>
               <div className="sub">Of total audience</div>
@@ -113,7 +114,7 @@ export default function Audience() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute flex flex-col items-center justify-center pointer-events-none">
-              <div className="text-2xl font-extrabold text-white">54%</div>
+              <div className="text-2xl font-extrabold text-white"><CountUp value="54%" /></div>
               <div className="text-[10px] text-[var(--txt-faint)] font-bold">FEMALE</div>
             </div>
           </div>
@@ -122,7 +123,7 @@ export default function Audience() {
               <div key={d.name} className="flex items-center gap-2 text-[13px]">
                 <span className="w-2 h-2 rounded-full" style={{background: d.color}}></span>
                 <span className="text-[var(--txt-dim)]">{d.name}</span>
-                <span className="ml-auto font-bold text-white">{d.value}%</span>
+                <span className="ml-auto font-bold text-white"><CountUp value={`${d.value}%`} /></span>
               </div>
             ))}
           </div>

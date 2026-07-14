@@ -1,9 +1,10 @@
 import { useStore } from "@/store/useStore";
-import { Megaphone, Play, DollarSign, ArrowUp, Plus, MoreHorizontal, Check, Edit, Copy, Trash } from "lucide-react";
+import { Megaphone, Play, DollarSign, ArrowUp, Plus, MoreHorizontal, Edit, Copy, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import CountUp from "@/components/CountUp";
 
 export default function Campaigns() {
   const campaigns = useStore(s => s.campaigns);
@@ -25,8 +26,8 @@ export default function Campaigns() {
   const avgRoas = activeCount ? (campaigns.reduce((a, c) => a + c.roas, 0) / activeCount).toFixed(1) : '0';
 
   const summary = [
-    { l: 'Total campaigns', v: campaigns.length, ic: Megaphone },
-    { l: 'Active now', v: campaigns.filter(c => c.status === 'active').length, ic: Play },
+    { l: 'Total campaigns', v: String(campaigns.length), ic: Megaphone },
+    { l: 'Active now', v: String(campaigns.filter(c => c.status === 'active').length), ic: Play },
     { l: 'Total spend', v: `$${totSpend.toLocaleString()}`, ic: DollarSign },
     { l: 'Avg. ROAS', v: `${avgRoas}x`, ic: ArrowUp }
   ];
@@ -190,17 +191,17 @@ export default function Campaigns() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-title">
+      <div className="page-title text-left">
         <h1>Campaigns</h1>
         <p>Create, monitor and optimise every campaign in one place.</p>
       </div>
 
-      <div className="grid g4">
+      <div className="grid g4 text-left">
         {summary.map((c, i) => (
           <div key={i} className="card hover stat reveal in">
             <div>
               <div className="s-label">{c.l}</div>
-              <div className="s-value">{c.v}</div>
+              <div className="s-value"><CountUp value={c.v} /></div>
             </div>
             <div className="s-ico">
               <c.ic size={22} color="#fff" />
@@ -225,7 +226,7 @@ export default function Campaigns() {
         </button>
       </div>
 
-      <div className="card panel reveal in">
+      <div className="card panel reveal in text-left">
         <div style={{overflowX: 'auto'}}>
           <table className="tbl">
             <thead>
@@ -252,11 +253,11 @@ export default function Campaigns() {
                   <td>
                     <span className={`pill ${c.status}`}><i></i>{c.status}</span>
                   </td>
-                  <td>${c.spend.toLocaleString()}</td>
-                  <td style={{color: 'var(--green)'}}>{c.roas ? `${c.roas}x` : '—'}</td>
+                  <td>$<CountUp value={c.spend} /></td>
+                  <td style={{color: 'var(--green)'}}>{c.roas ? <span><CountUp value={c.roas} />x</span> : '—'}</td>
                   <td>
                     <div className="comp">
-                      <span className="cp">{c.prog}%</span>
+                      <span className="cp"><CountUp value={c.prog} />%</span>
                       <div className="comp-track">
                         <div className="comp-fill" style={{width: `${c.prog}%`, background: `linear-gradient(90deg, ${c.c}, ${c.c}bb)`}}></div>
                       </div>
@@ -299,8 +300,8 @@ export default function Campaigns() {
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="bg-[#0B1437] border-[var(--border-hi)] text-white max-w-[500px] rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">{editingCamp ? "Edit campaign" : "Launch a campaign"}</DialogTitle>
-            <DialogDescription className="text-sm text-[var(--txt-dim)]">
+            <DialogTitle className="text-xl font-bold text-left">{editingCamp ? "Edit campaign" : "Launch a campaign"}</DialogTitle>
+            <DialogDescription className="text-sm text-[var(--txt-dim)] text-left">
               {editingCamp ? "Update your campaign settings." : "Set up your next campaign in seconds."}
             </DialogDescription>
           </DialogHeader>

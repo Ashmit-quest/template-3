@@ -1,7 +1,8 @@
 import { CreditCard, Check, Download, Edit } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import CountUp from "@/components/CountUp";
 
 export default function Billing() {
   const [selectedPlan, setSelectedPlan] = useState("Pro");
@@ -34,7 +35,7 @@ export default function Billing() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-title">
+      <div className="page-title text-left">
         <h1>Billing</h1>
         <p>Manage your plan, payment method and invoices.</p>
       </div>
@@ -49,25 +50,25 @@ export default function Billing() {
             <button className="btn btn-p btn-sm" onClick={() => setModalOpen(true)}>Change plan</button>
           </div>
           <div className="usage-row">
-            <div className="usage-top"><span className="ul">Campaigns</span><span className="uv">18 / Unlimited</span></div>
+            <div className="usage-top"><span className="ul">Campaigns</span><span className="uv"><CountUp value="18" /> / Unlimited</span></div>
             <div className="meter"><span style={{ width: animated ? '45%' : '0%', transition: 'width 1.2s cubic-bezier(.22,1,.36,1)' }}></span></div>
           </div>
           <div className="usage-row">
-            <div className="usage-top"><span className="ul">Monthly emails</span><span className="uv">84,200 / 100,000</span></div>
+            <div className="usage-top"><span className="ul">Monthly emails</span><span className="uv"><CountUp value="84,200" /> / 100,000</span></div>
             <div className="meter"><span style={{ width: animated ? '84%' : '0%', transition: 'width 1.2s cubic-bezier(.22,1,.36,1)' }}></span></div>
           </div>
           <div className="usage-row">
-            <div className="usage-top"><span className="ul">Team seats</span><span className="uv">4 / 10</span></div>
+            <div className="usage-top"><span className="ul">Team seats</span><span className="uv"><CountUp value="4" /> / 10</span></div>
             <div className="meter"><span style={{ width: animated ? '40%' : '0%', transition: 'width 1.2s cubic-bezier(.22,1,.36,1)' }}></span></div>
           </div>
           <div className="usage-row">
-            <div className="usage-top"><span className="ul">API calls</span><span className="uv">312K / 500K</span></div>
+            <div className="usage-top"><span className="ul">API calls</span><span className="uv"><CountUp value="312K" /> / 500K</span></div>
             <div className="meter"><span style={{ width: animated ? '62%' : '0%', transition: 'width 1.2s cubic-bezier(.22,1,.36,1)' }}></span></div>
           </div>
         </div>
 
         <div className="card panel reveal in">
-          <div className="panel-h">
+          <div className="panel-h text-left">
             <div>
               <h3>Payment method</h3>
               <div className="sub">Next charge Aug 1, 2026</div>
@@ -114,7 +115,7 @@ export default function Billing() {
                 <tr key={i}>
                   <td>{iv[0]}</td>
                   <td style={{ color: 'var(--txt-dim)' }}>{iv[1]}</td>
-                  <td>{iv[2]}</td>
+                  <td><CountUp value={iv[2]} /></td>
                   <td><span className="pill active"><i></i>{iv[3]}</span></td>
                   <td style={{ textAlign: 'right' }}>
                     <button className="btn btn-g btn-sm flex items-center gap-2 ml-auto" onClick={() => toast.success(`Downloading ${iv[0]}.pdf`)}>
